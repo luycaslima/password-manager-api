@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Dto.Password;
 using PasswordManager.Entities;
@@ -11,6 +12,7 @@ namespace PasswordManager.Controllers
     {
         private readonly IPasswordDataService _passwordService = service;
 
+
         [HttpPost]
         [ProducesResponseType(typeof(int),StatusCodes.Status201Created)]
         public IActionResult AddNewPassword([FromBody] RequestAddPasswordDataDTO request){
@@ -20,7 +22,7 @@ namespace PasswordManager.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<PasswordData>),StatusCodes.Status200OK)]
         public IActionResult GetAllPasswords(){
             var list = _passwordService.GetListOfAllPasswords();
             return Ok(list);
@@ -54,14 +56,27 @@ namespace PasswordManager.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult UpdatePassword([FromRoute] int id){
-            return Ok();
+        [ProducesResponseType(typeof(PasswordData),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
+        public IActionResult UpdatePassword([FromRoute] int id, [FromBody] RequestAddPasswordDataDTO request){
+            var result = _passwordService.UpdatePasswordData(id,request);
+            if(result is null){
+                return NotFound("Password not found!");
+            }
+            return Ok(result);
         }
 
         [HttpDelete]
         [Route("{id}")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
         public IActionResult DeletePassword([FromRoute]int id) {
-            return Ok();
+            var result = _passwordService.DeletePasswordDataEntry(id);
+
+            if(!result){
+                return NotFound("Password not found!");
+            }
+            return Ok("Deleted Successfully!");
         }
     }
     

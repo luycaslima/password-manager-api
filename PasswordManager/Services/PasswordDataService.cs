@@ -7,7 +7,7 @@ namespace PasswordManager.Services
     public class PasswordDataService(IPasswordRepository repository) : IPasswordDataService
     {
         private readonly IPasswordRepository _repository = repository;
-
+        
         public int AddPassword(RequestAddPasswordDataDTO request) {
             var encrypted = EncodePassword(request.Password);
 
@@ -21,6 +21,35 @@ namespace PasswordManager.Services
 
             _repository.Add(passwordData);
             return passwordData.Id;
+        }
+
+        public PasswordData? UpdatePasswordData(int id ,RequestAddPasswordDataDTO request){
+            var data = _repository.GetPasswordDataById(id);
+            
+            if (data is null){
+                return null;
+            }
+
+            var encryptedPassword = EncodePassword(request.Password);
+            
+            data.App = request.App;
+            data.Category = request.Category;
+            data.Username = request.Username;
+            data.EncryptedPassword = encryptedPassword;
+
+            _repository.Update(data);
+            return data;
+        }
+
+        public bool DeletePasswordDataEntry(int id){
+            var data = _repository.GetPasswordDataById(id);
+
+            if(data is null){
+                return false;
+            }
+
+            _repository.Delete(data);
+            return true;
         }
 
         public PasswordData? GetEncryptedPasswordData(int id)=> _repository.GetPasswordDataById(id);

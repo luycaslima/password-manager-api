@@ -10,6 +10,8 @@ namespace PasswordManager.Services
 
         List<PasswordData> GetListOfAllPasswords();
         PasswordData? GetEncryptedPasswordData(int id);
+        PasswordData? UpdatePasswordData(int id ,RequestAddPasswordDataDTO request);
+        bool DeletePasswordDataEntry(int id);
         DecryptedPasswordData? GetDecryptedPasswordData(int id);
     }
 }
