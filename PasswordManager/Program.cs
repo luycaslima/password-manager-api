@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using PasswordManager.Repositories;
 using PasswordManager.Repositories.DataAccess;
@@ -9,9 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options=>{
 
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
+    string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath, true);
+
+});
+
+
+//builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddScoped<IPasswordDataService,PasswordDataService>();
 builder.Services.AddScoped<IPasswordRepository,PasswordRepository>();
 //builder.Services.AddScoped<AddPasswordUseCase>();
