@@ -20,7 +20,7 @@ namespace PasswordManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(int),StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)] 
         public IActionResult AddNewPassword([FromBody] RequestAddPasswordDataDTO request){
             var id = _passwordService.AddPassword(request);
 

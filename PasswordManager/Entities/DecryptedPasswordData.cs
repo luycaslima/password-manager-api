@@ -7,17 +7,26 @@ namespace PasswordManager.Entities
     {
         public int Id { get; set; }
 
-        [Required]
+        /// <summary>
+        /// Application's name
+        /// </summary>
         public string App { get; set; } = string.Empty;
         
-        [Required]
+        /// <summary>
+        /// Which category this app is. 
+        /// Ex: Games, Finances.
+        /// </summary>
         public string Category { get; set; } = string.Empty;
         
-        [Required]
+        /// <summary>
+        /// Username or Email of the Password
+        /// </summary>
         [JsonPropertyName("userName")]
         public string Username { get; set; } = string.Empty;
 
-        [Required]
+        /// <summary>
+        /// Encrypted Password
+        /// </summary>
         [JsonPropertyName("decryptedPassword")]
         public string DecryptedPassword { get; set; } = string.Empty;
     
